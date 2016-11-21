@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block bcnav %}
+    <li><a href="{{ url_for(".index") }}">Settings</a></li>
+{% endblock %}
+{% block toolbar %}
+    <li><a href="{{ url_for("settings.probes") }}">Probes</a></li>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "settings/probes.html" %}
+{% block content %}
+    <h1>Probes</h1>
+
+    <table class="list">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Mapped services</th>
+                <th>Provided services</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for probe in probes %}
+            <tr>
+                <td><a href="{{ url_for('.services', probe=probe.name) }}" class="full">{{ probe.name }}</a></td>
+                <td><a href="{{ url_for('.services', probe=probe.name) }}" class="full">{{ probe.num_mapped }}</a></td>
+                <td><a href="{{ url_for('.services', probe=probe.name) }}" class="full">{{ probe.num_services }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

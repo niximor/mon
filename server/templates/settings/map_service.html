@@ -1,0 +1,14 @@
+{% extends "settings/probes.html" %}
+{% block bcnav %}
+    {{ super() }}
+    <li><a href="{{ url_for(".services", probe=probe.name) }}">Service mapping</a></li>
+{% endblock %}
+{% block content %}
+    <h1>Map new service</h1>
+    <dl>
+        {% for service in probe.services %}
+            <dt><a href="{{ url_for('.map_service', probe=probe.name, service=service.name) }}">{{ service.name }}</a></dt>
+            <dd>{{ service.description }}</dd>
+        {% endfor %}
+    </dl>
+{% endblock %}

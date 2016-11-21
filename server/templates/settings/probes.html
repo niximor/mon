@@ -1,0 +1,5 @@
+{% extends "settings/settings.html" %}
+{% block bcnav %}
+    {{ super() }}
+    <li><a href="{{ url_for(".probes") }}">Probes</a></li>
+{% endblock %}

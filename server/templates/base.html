@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mon</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+
+<body>
+<div id="holder">
+    <header>
+        <div id="headline">
+            <h1><a href="{{ url_for('index') }}">Mon</a></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('settings.index') }}">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div id="contentblock">
+        <aside>
+            <nav>
+                <h2>Probes</h2>
+                <ul>
+                {% for probe in probes_list %}
+                    <li>
+                        <a href="{{ url_for('probe.index', name=probe.name) }}">
+                            {{ probe.name }}
+                            {% if probe.warnings > 0 %}<span class="warnings">{{ probe.warnings }}</span>{% endif %}
+                            {% if probe.errors > 0 %}<span class="errors">{{ probe.errors }}</span>{% endif %}
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </nav>
+
+            <p class="copy">Mon &copy; Niximor 2016</p>
+        </aside>
+        <div id="content">
+            <nav class="toolbar">
+                {% if self.bcnav() %}
+                <ul class="bcnav">
+                    {% block bcnav %}{% endblock %}
+                </ul>
+                {% endif %}
+                {% if self.toolbar() %}
+                <ul class="toolbar">
+                    {% block toolbar %}{% endblock %}
+                </ul>
+                {% endif %}
+            </nav>
+            <section id="main">
+                {% block content %}{% endblock %}
+
+                <code class="debug">
+                {% for key, value in context().items() %}
+                    {% if not callable(value) %}
+                        {{ key }} = {{ value }}<br />
+                    {% endif %}
+                {% endfor %}
+                </code>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+</html>

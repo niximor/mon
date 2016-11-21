@@ -1,0 +1,37 @@
+{% extends "settings/probes.html" %}
+{% block bcnav %}
+    {{ super() }}
+    <li><a href="{{ url_for(".services", probe=probe.name) }}">Service mapping</a></li>
+{% endblock %}
+{% block content %}
+    <h1>Services of probe {{ probe.name }}</h1>
+
+    <table class="list">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Service</th>
+                <th><a href="{{ url_for('.map_service', probe=probe.name) }}">Map new service</a></th>
+            </tr>
+        </thead>
+
+        {% for service in services %}
+            <tbody class="row">
+                <tr>
+                    <td><a href="{{ url_for('.toggle_status', probe=probe.name, db_id=service.id) }}" class="icon {{ service.status }}" title="{% if service.status == 'active' %}Active{% elif service.status == 'suspended' %}Suspended{% else %}{{ service.error_cause }}{% endif %}"></a> {{ service.name }}</td>
+                    <td>{{ service.service }}</td>
+                    <td>
+                        <a href="{{ url_for('.modify_mapping', probe=probe.name, db_id=service.id) }}">Modify</a>
+                        <a href="{{ url_for('.delete_mapping', probe=probe.name, db_id=service.id) }}">Remove</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        {% if service.error_cause %}<p class="error">{{ service.error_cause }}</p>{% endif %}
+                        <p>{{ service.description }}</p>
+                    </td>
+                </tr>
+            </tbody>
+        {% endfor %}
+    </table>
+{% endblock %}

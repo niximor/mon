@@ -1,0 +1,50 @@
+{% extends "settings/probes.html" %}
+{% block bcnav %}
+    {{ super() }}
+    <li><a href="{{ url_for(".services", probe=probe.name) }}">Service mapping</a></li>
+    <li><span>Modify service</span></li>
+{% endblock %}
+{% block content %}
+    <h1>Modify service {{ service.name }} in probe {{ probe.name }}</h1>
+
+    <form action="{{ url_for(".modify_mapping", probe=probe.name, db_id=service.id) }}" method="post">
+        <div>
+            <label for="name">Mapping name:</label>
+            <span>
+                <input type="text" name="name" value="{{ service.name }}" />
+            </span>
+        </div>
+
+        <div>
+            <label for="description">Description:</label>
+            <span>
+                <textarea name="description">{{ service.description }}</textarea>
+            </span>
+        </div>
+
+        {% for option in service.options %}
+            <label>
+                <span>
+                    {{ option.name }}:
+                    {% if option.required %}
+                        <span class="required" title="This option is required.">(required)</span>
+                    {% endif %}
+                </span>
+                <span>
+                    <input type="hidden" name="option" value="{{ option.identifier }}" />
+                    {% if option.type == "string" %}<input type="text" name="value" value="{{ option.value if option.value != None else '' }}" />{% endif %}
+                    {% if option.type == "integer" %}<input type="number" name="value" value="{{ option.value if option.value != None else '' }}" />{% endif %}
+                    {% if option.type == "double" %}<input type="number" name="value" value="{{ option.value if option.value != None else '' }}" />{% endif %}
+                    {% if option.type == "bool" %}<input type="hidden" name="value" value="0" /><input type="checkbox" name="{% if not option.value %}value{% endif %}" value="1" onchange="this.previousSibling.name = (!this.checked)?'value':''" {% if option.value %}checked{% endif %} />{% endif %}
+                    {% if option.type == "list" %}<textarea name="value">{{ option.value }}</textarea>{% endif %}
+                    {% if option.description %}<p class="description">{{ option.description }}</p>{% endif %}
+                </span>
+            </label>
+        {% endfor %}
+
+        <div class="buttons">
+            <input type="submit" value="Modify" />
+            <a href="{{ url_for('.services', probe=probe.name) }}" class="button">Cancel</a>
+        </div>
+    </form>
+{% endblock %}

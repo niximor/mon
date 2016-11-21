@@ -1,0 +1,46 @@
+{% extends "settings/settings.html" %}
+{% block content %}
+    <h1>Map new service</h1>
+
+    <form action="{{ url_for('.map_service', probe=probe.name) }}" method="post">
+        <input type="hidden" name="service" value="{{ service.name }}" />
+
+        <div>
+            <label for="name">Mapping name:</label>
+            <span>
+                <input type="text" name="name" />
+            </span>
+        </div>
+
+        <div>
+            <label for="description">Description:</label>
+            <span>
+                <textarea name="description"></textarea>
+            </span>
+        </div>
+
+        {% for option in service.options %}
+            <label>
+                <span>
+                    {{ option.name }}:
+                    {% if option.required %}
+                        <span class="required" title="This option is required.">(required)</span>
+                    {% endif %}
+                </span>
+                <span>
+                    <input type="hidden" name="option" value="{{ option.identifier }}" />
+                    {% if option.type == "string" %}<input type="text" name="value" />{% endif %}
+                    {% if option.type == "integer" %}<input type="number" name="value" />{% endif %}
+                    {% if option.type == "double" %}<input type="number" name="value" />{% endif %}
+                    {% if option.type == "bool" %}<input type="hidden" name="value" value="0" /><input type="checkbox" name="value" value="1" onchange="this.previousSibling.name = (!this.checked)?'value':''" />{% endif %}
+                    {% if option.type == "list" %}<textarea name="value"></textarea>{% endif %}
+                {% if option.description %}<p class="description">{{ option.description }}</p>{% endif %}
+                </span>
+            </label>
+        {% endfor %}
+
+        <div class="buttons">
+            <input type="submit" value="Map service" />
+        </div>
+    </form>
+{% endblock %}
