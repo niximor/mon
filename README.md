@@ -1,0 +1,2 @@
+# mon
+Lightweight monitoring platform
